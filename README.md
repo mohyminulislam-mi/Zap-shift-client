@@ -1,16 +1,16 @@
-# React + Vite
+রিসেন্টলি ডার্ক মোড নিয়ে অনেকেরই সমস্যা দেখা যাচ্ছে। বিশেষ করে :dark প্রিফিক্স নিয়ে।
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+অনেকে text-red-500 dark:text-yellow-500 এইভাবে dark: প্রিফিক্স ব্যবহার করলেও কাজ করতেছে না।
 
-Currently, two official plugins are available:
+নরমালি Tailwind এ ডার্ক মোড টগল করার দুইটা উপায় আছে:
+১। data-theme অ্যাট্রিবিউট টগল করা। যেমন: <html data-theme="light"> অথবা <html data-theme="dark">
+২। অথবা dark ক্লাস এড/রিমুভ করা — যেমন: <html class="dark"> অথবা <html class="">
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+ডিবাগ করার সময় ডেভটুলে গিয়ে দেখবেন, স্টুডেন্টরা যখন ডার্ক মোড আইকনে ক্লিক করে, তখন html ট্যাগে এই অ্যাট্রিবিউট বা ক্লাস টা ঠিকভাবে টগল হচ্ছে কিনা।
 
-## React Compiler
+আরেকটা ব্যাপার হচ্ছে, :dark প্রিফিক্স কাজ করাতে রুট CSS ফাইলে নিচের কোডগুলো এড করবেনঃ
+১। যদি data-theme ব্যবহার করে: @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] ));
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+     ২। আর যদি dark ক্লাস ব্যবহার করে: @custom-variant dark (&:where(.dark, .dark));
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+আশা করি এরপর Tailwind এর dark: ভ্যারিয়েন্ট সঠিকভাবে কাজ করবে।
