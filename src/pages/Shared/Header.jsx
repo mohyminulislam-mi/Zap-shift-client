@@ -7,22 +7,22 @@ const Header = () => {
   const links = (
     <>
       <li>
-        <NavLink to={"/"}>Services</NavLink>
+        <NavLink to={"/services"}>Services</NavLink>
       </li>
       <li>
-        <NavLink to={"/"}>Coverage</NavLink>
+        <NavLink to={"/coverage"}>Coverage</NavLink>
       </li>
       <li>
-        <NavLink to={"/"}>About Us</NavLink>
+        <NavLink to={"/about-us"}>About Us</NavLink>
       </li>
       <li>
-        <NavLink to={"/"}>Pricing</NavLink>
+        <NavLink to={"/pricing"}>Pricing</NavLink>
       </li>
       <li>
-        <NavLink to={"/"}>Blog</NavLink>
+        <NavLink to={"/blogs"}>Blog</NavLink>
       </li>
       <li>
-        <NavLink to={"/"}>Contact</NavLink>
+        <NavLink to={"/contact"}>Contact</NavLink>
       </li>
     </>
   );
@@ -62,10 +62,15 @@ const Header = () => {
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end flex gap-2">
-        <button className="btn btn-outline outline-primary font-bold hover:bg-primary hover:text-secondary">Sing In</button>
-              <button className="btn bg-primary  text-secondary  font-bold">Sing Up</button>
-              <button className=" p-2 bg-black rounded-full cursor-pointer"><FiArrowUpRight className="text-primary text-2xl"/></button>
-              
+        <button className="btn btn-outline outline-primary font-bold hover:bg-primary hover:text-secondary">
+          Sing In
+        </button>
+        <button className="btn bg-primary  text-secondary  font-bold">
+          Sing Up
+        </button>
+        <button className=" p-2 bg-black rounded-full cursor-pointer">
+          <FiArrowUpRight className="text-primary text-2xl" />
+        </button>
       </div>
     </div>
   );
