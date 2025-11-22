@@ -43,7 +43,7 @@ const Brands = () => {
         modules={[Autoplay]}
         className="mySwiper"
       >
-        {brandsLogo.map((logo, index) => (
+        {[...brandsLogo, ...brandsLogo].map((logo, index) => (
           <SwiperSlide key={index}>
             <img src={logo} alt={`Brand ${index}`}  />
           </SwiperSlide>

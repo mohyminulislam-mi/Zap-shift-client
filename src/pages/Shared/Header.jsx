@@ -2,8 +2,19 @@ import React from "react";
 import { Link, NavLink } from "react-router";
 import Logo from "./Logo";
 import { FiArrowUpRight } from "react-icons/fi";
+import useAuth from "../../hooks/useAuth";
 
 const Header = () => {
+  const { user, logOut } = useAuth();
+
+  const handleLogOut = () => {
+    logOut()
+      .then()
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const links = (
     <>
       <li>
@@ -54,23 +65,35 @@ const Header = () => {
             {links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">
+        <div >
           <Logo />
-        </a>
+        </div>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end flex gap-2">
-        <Link to={'/login'} className="btn btn-outline outline-primary font-bold hover:bg-primary hover:text-secondary">
-          Sing In
-        </Link>
-        <Link to={'/registration'} className="btn bg-primary  text-secondary  font-bold">
-          Sing Up
-        </Link>
-        <button className=" p-2 bg-black rounded-full cursor-pointer">
-          <FiArrowUpRight className="text-primary text-2xl" />
-        </button>
+        {user ? (
+          <button onClick={handleLogOut} className="btn bg-primary coursor-pointer">logout</button>
+        ) : (
+          <>
+            <Link
+              to={"/login"}
+              className="btn btn-outline outline-primary font-bold hover:bg-primary hover:text-secondary"
+            >
+              Sing In
+            </Link>
+            <Link
+              to={"/registration"}
+              className="btn bg-primary  text-secondary  font-bold"
+            >
+              Sing Up
+            </Link>
+            <button className=" p-2 bg-black rounded-full cursor-pointer">
+              <FiArrowUpRight className="text-primary text-2xl" />
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
