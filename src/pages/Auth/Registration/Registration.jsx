@@ -1,6 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import useAuth from "../../../hooks/useAuth";
+import GoogleLogin from "../SocialLogin/GoogleLogin";
 
 const Registration = () => {
   const {
@@ -8,16 +10,25 @@ const Registration = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const { registerUser } = useAuth();
+
+  // register user start
   const handleRegister = (data) => {
-    console.log(data);
+    registerUser(data.email, data.password)
+      .then((result) => {
+        console.log("register user", result.user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
-    <div className="max-w-96 mx-4 md:p-6 p-4 text-left text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10">
+    <div className="max-w-96 mx-auto md:p-6 p-4 text-left text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10">
       <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
-        Welcome
+        Create ZapShift Account
       </h2>
       <form onSubmit={handleSubmit(handleRegister)}>
-        <input
+        {/* <input
           id="name"
           {...register("firstName", { required: true })}
           className="w-full bg-transparent border mt-3 border-gray-500/30 outline-none rounded-full py-2.5 px-4"
@@ -27,7 +38,7 @@ const Registration = () => {
         />
         {errors.firstName?.type === "required" && (
           <p className="text-red-500">First name is required</p>
-        )}
+        )} */}
         <input
           id="email"
           {...register("email", { required: true })}
@@ -72,18 +83,8 @@ const Registration = () => {
           Log In
         </Link>
       </p>
-
-      <button
-        type="button"
-        className="w-full cursor-pointer flex items-center gap-2 justify-center my-3 bg-white border border-gray-500/30 py-2.5 rounded-full text-gray-800"
-      >
-        <img
-          className="h-4 w-4"
-          src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleFavicon.png"
-          alt="googleFavicon"
-        />
-        Register with google
-      </button>
+      {/* Google Login */}
+      <GoogleLogin />
     </div>
   );
 };
