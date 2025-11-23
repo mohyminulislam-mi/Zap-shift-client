@@ -1,8 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import GoogleLogin from "../SocialLogin/GoogleLogin";
+import axios from "axios";
 
 const Registration = () => {
   const {
@@ -10,13 +11,39 @@ const Registration = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { registerUser } = useAuth();
+  const { registerUser, updateUserProfile } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // register user start
   const handleRegister = (data) => {
+    const profileImg = data.photo[0];
     registerUser(data.email, data.password)
       .then((result) => {
         console.log("register user", result.user);
+        // 1. store the image in form data
+        const formData = new FormData();
+        formData.append("image", profileImg);
+        // 2. send the photo to store and get the ul
+        const imageApiUrl = `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_image_host
+        }`;
+        axios.post(imageApiUrl, formData).then((res) => {
+          console.log("after img upload", res.data.data.url);
+          //update profile to firebase
+          const userProfile = {
+            displayName: data.name,
+            photoURL: res.data.data.url,
+          };
+          updateUserProfile(userProfile)
+            .then(() => {
+              console.log(" update user profile done");
+              navigate(location?.state || "/");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -28,17 +55,33 @@ const Registration = () => {
         Create ZapShift Account
       </h2>
       <form onSubmit={handleSubmit(handleRegister)}>
-        {/* <input
+        {/* name  */}
+        <input
           id="name"
-          {...register("firstName", { required: true })}
+          {...register("name", { required: true })}
           className="w-full bg-transparent border mt-3 border-gray-500/30 outline-none rounded-full py-2.5 px-4"
           type="text"
           placeholder="Enter your Name"
           required
         />
-        {errors.firstName?.type === "required" && (
+        {errors.name?.type === "required" && (
           <p className="text-red-500">First name is required</p>
-        )} */}
+        )}
+
+        {/* file upload */}
+        <div className="fieldset">
+          <input
+            id="photo"
+            type="file"
+            {...register("photo", { required: true })}
+            className="file-input rounded-full w-full mt-2"
+          />
+          <label className="label">Max size 1MB</label>
+          {errors.photo?.type === "required" && (
+            <p className="text-red-500">First name is required</p>
+          )}
+        </div>
+        {/* email  */}
         <input
           id="email"
           {...register("email", { required: true })}
@@ -79,7 +122,11 @@ const Registration = () => {
       </form>
       <p className="text-center mt-4">
         Already have an account?{" "}
-        <Link to={"/login"} className="text-blue-500 underline">
+        <Link
+          state={location.state}
+          to={"/login"}
+          className="text-blue-500 underline"
+        >
           Log In
         </Link>
       </p>

@@ -7,13 +7,14 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../../firebase/Firebase.init";
 
 const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser]  = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   // Create user
   const registerUser = (email, password) => {
@@ -35,7 +36,10 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     return signOut(auth);
   };
-
+  //update profile
+  const updateUserProfile = (profile) => {
+    return updateProfile(auth.currentUser, profile);
+  };
   //observe user state
   useEffect(() => {
     const unSubscibe = onAuthStateChanged(auth, (currentUser) => {
@@ -56,6 +60,7 @@ const AuthProvider = ({ children }) => {
     singInUser,
     singInGoogle,
     logOut,
+    updateUserProfile,
   };
   return <AuthContext value={authInfo}>{children}</AuthContext>;
 };

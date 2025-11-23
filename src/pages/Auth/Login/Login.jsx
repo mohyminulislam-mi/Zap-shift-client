@@ -1,10 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import GoogleLogin from "../SocialLogin/GoogleLogin";
 
 const Login = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -16,6 +18,7 @@ const Login = () => {
     singInUser(data.email, data.password)
       .then((result) => {
         console.log("after login", result.user);
+        navigate(location?.state || '/')
       })
       .catch((error) => {
         console.log(error);
@@ -71,7 +74,10 @@ const Login = () => {
       </form>
       <p className="text-center mt-4">
         Don’t have an account?{" "}
-        <Link to={"/registration"} className="text-blue-500 underline">
+        <Link
+          state={location.state}
+          to={"/registration"}
+          className="text-blue-500 underline">
           Signup
         </Link>
       </p>
