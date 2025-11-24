@@ -35,6 +35,9 @@ const Header = () => {
       <li>
         <NavLink to={"/contact"}>Contact</NavLink>
       </li>
+      <li>
+        <NavLink to={"/send-parcel"}>Send Parcel</NavLink>
+      </li>
     </>
   );
   return (
@@ -65,7 +68,7 @@ const Header = () => {
             {links}
           </ul>
         </div>
-        <div >
+        <div>
           <Logo />
         </div>
       </div>
@@ -74,7 +77,12 @@ const Header = () => {
       </div>
       <div className="navbar-end flex gap-2">
         {user ? (
-          <button onClick={handleLogOut} className="btn bg-primary coursor-pointer">logout</button>
+          <button
+            onClick={handleLogOut}
+            className="btn bg-primary coursor-pointer"
+          >
+            logout
+          </button>
         ) : (
           <>
             <Link
@@ -89,9 +97,12 @@ const Header = () => {
             >
               Sing Up
             </Link>
-            <button className=" p-2 bg-black rounded-full cursor-pointer">
+            <Link
+              to={"/rider"}
+              className=" p-2 bg-black rounded-full cursor-pointer"
+            >
               <FiArrowUpRight className="text-primary text-2xl" />
-            </button>
+            </Link>
           </>
         )}
       </div>
