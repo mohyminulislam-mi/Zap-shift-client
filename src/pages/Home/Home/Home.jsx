@@ -7,6 +7,7 @@ import Reviews from "../Reviews/Reviews";
 import Loading from '../../../Loading/Loading'
 import ServiceFeatures from "../ServiceFeatures/ServiceFeatures";
 import Merchant from "../Merchant/Merchant";
+import FAQ from "../FAQ/FAQ";
 
 const reviewsPromise = fetch('/reviews.json').then(res => res.json())
 const Home = () => {
@@ -24,6 +25,7 @@ const Home = () => {
         </Suspense>
       
       </div>
+      <div><FAQ /></div>
     </div>
   );
 };
