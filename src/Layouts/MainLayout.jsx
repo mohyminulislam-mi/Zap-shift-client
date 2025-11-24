@@ -7,7 +7,7 @@ import Header from "../pages/Shared/Header";
 const MainLayout = () => {
   return (
     <div className="max-w-7xl mx-auto">
-      <header className="py-6">
+      <header className="sticky top-0 z-50 py-4">
         <Header />
       </header>
       <Outlet>
