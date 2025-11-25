@@ -38,6 +38,9 @@ const Header = () => {
       <li>
         <NavLink to={"/send-parcel"}>Send Parcel</NavLink>
       </li>
+      <li>
+        <NavLink to={"/dashboard"}>dashboard</NavLink>
+      </li>
     </>
   );
   return (
