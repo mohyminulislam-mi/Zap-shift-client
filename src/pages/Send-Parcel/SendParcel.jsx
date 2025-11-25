@@ -3,6 +3,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const SendParcel = () => {
   const {
@@ -11,6 +12,7 @@ const SendParcel = () => {
     control,
     // formState: { errors }
   } = useForm();
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
   const serviceCenters = useLoaderData();
@@ -58,14 +60,19 @@ const SendParcel = () => {
       text: `You will be charged ${cost} taka!`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "#CAEB66",
       cancelButtonColor: "#d33",
-      confirmButtonText: "I agree!",
+      confirmButtonText: "Confirm",
     }).then((result) => {
       if (result.isConfirmed) {
+        //save the parcel into database
+        axiosSecure.post("/parcels", data).then((res) => {
+          console.log("after saving parcel", res.data);
+        });
+
         Swal.fire({
-          title: "Confirm!",
-          text: "Place Confirm.",
+          title: "Success!",
+          text: "Your parcel has been successfully place. We will contact as soon as possible. Thank you!",
           icon: "success",
         });
       }
@@ -80,13 +87,16 @@ const SendParcel = () => {
         className="mt-12 p-4 text-black"
       >
         {/* parcel type*/}
+        <label className="label font-semibold mb-2 text-black">
+          Parcel Type
+        </label>
         <div>
           <label className="label mr-4">
             <input
               type="radio"
               {...register("parcelType")}
               value="document"
-              className="radio"
+              className="radio radio-primary"
               defaultChecked
             />
             Document
@@ -96,7 +106,7 @@ const SendParcel = () => {
               type="radio"
               {...register("parcelType")}
               value="non-document"
-              className="radio"
+              className="radio radio-primary"
             />
             Non-Document
           </label>
