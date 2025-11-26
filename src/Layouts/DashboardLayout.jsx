@@ -7,31 +7,36 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { BsLayoutTextSidebar } from "react-icons/bs";
 import useAuth from "../hooks/useAuth";
 
-
 const DashboardLayout = () => {
-    const {user} = useAuth()
+  const { user } = useAuth();
+  console.log(user?.email);
+  
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         {/* Navbar */}
         <nav className="navbar w-full bg-base-300 grid grid-cols-1 lg:grid-cols-2">
-                  <div className="flex items-center">
-                      <label
-            htmlFor="my-drawer-4"
-            aria-label="open sidebar"
-            className="btn btn-square btn-ghost"
-          >
-            {/* Sidebar toggle icon */}
-            <BsLayoutTextSidebar />
-          </label>
-          <div className="px-3">
-            <Logo />
-                  </div>
+          <div className="flex items-center">
+            <label
+              htmlFor="my-drawer-4"
+              aria-label="open sidebar"
+              className="btn btn-square btn-ghost"
+            >
+              {/* Sidebar toggle icon */}
+              <BsLayoutTextSidebar />
+            </label>
+            <div className="px-3">
+              <Logo />
+            </div>
           </div>
-                  <div className="text-end">
-                      <div> <img src={user?.imgee} alt="image" /> Admin</div>
-                     </div>
+          <div className="text-end">
+            <div>
+              <img src={user?.photoUrl} alt="" />
+              <h1> {user?.displayName}</h1>
+              <p> {user?.email}</p>
+            </div>
+          </div>
         </nav>
         {/* Page content here */}
         <div className="p-4">
@@ -84,8 +89,8 @@ const DashboardLayout = () => {
                 <FaBoxOpen />
                 <span className="is-drawer-close:hidden">my parcel</span>
               </NavLink>
-                      </li>
-                      <li>
+            </li>
+            <li>
               <NavLink
                 to="/dashboard/setting"
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
