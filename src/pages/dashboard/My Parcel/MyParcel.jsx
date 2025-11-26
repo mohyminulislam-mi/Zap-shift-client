@@ -8,17 +8,22 @@ import { IoSearchSharp } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import Swal from "sweetalert2";
+import { Link } from "react-router";
+import Loading from "../../../Loading/Loading";
 
 const MyParcel = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const { data: parcels = [], refetch } = useQuery({
+  const {isLoading, data: parcels = [], refetch } = useQuery({
     queryKey: ["my-parcel", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/parcels?email=${user.email}`);
       return res.data;
     },
   });
+   if (isLoading) {
+        return <Loading />
+    }
   const handleParcelDelete = (id) => {
     console.log(id);
     Swal.fire({
@@ -56,7 +61,8 @@ const MyParcel = () => {
               <th></th>
               <th>Name</th>
               <th>Cost</th>
-              <th>payment status</th>
+              <th>Payment Status</th>
+              <th>Delivary Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -67,7 +73,20 @@ const MyParcel = () => {
                 <th>{index + 1}</th>
                 <td>{parcel.parcelName}</td>
                 <td>{parcel.cost}</td>
-                <td>Pending</td>
+                <td>
+                  {parcel.paymentStatus === "paid" ? (
+                    <span className="bg-green-100 text-green-600 py-1 px-1.5 rounded">
+                      Paid
+                    </span>
+                  ) : (
+                    <Link to={`/dashboard/payment/${parcel._id}`}>
+                      <span className="text-white bg-red-600 py-1 px-1.5 rounded">
+                        Pay now
+                      </span>
+                    </Link>
+                  )}
+                </td>
+                <td>{parcel.delivaryStatus}</td>
                 <td className="flex gap-3">
                   <button className="btn hover:bg-primary ">
                     <IoSearchSharp />
