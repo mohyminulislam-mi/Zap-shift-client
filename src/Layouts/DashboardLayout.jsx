@@ -1,9 +1,8 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../pages/Shared/Logo";
-import { FaBoxOpen } from "react-icons/fa";
+import { FaBoxOpen, FaHistory } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
-import { FaRegCircleUser } from "react-icons/fa6";
 import { BsLayoutTextSidebar } from "react-icons/bs";
 import useAuth from "../hooks/useAuth";
 
@@ -135,6 +134,17 @@ const DashboardLayout = () => {
                 {/* Settings icon */}
                 <FaBoxOpen />
                 <span className="is-drawer-close:hidden">My Parcel</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/payment-history"
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="Payment History"
+              >
+                {/* Settings icon */}
+                <FaHistory />
+                <span className="is-drawer-close:hidden">Payment History</span>
               </NavLink>
             </li>
             <li>

@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import ParcelDetails from "./ParcelDetails";
+import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const parcels = [
   {
@@ -52,13 +55,23 @@ const parcels = [
 
 export default function PaymentHistory() {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth()
+  const axiosSecure = useAxiosSecure();
+  const { data: payments = []} = useQuery({
+    queryKey: ['payments', user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/payments?email=${user?.email}`)
+      return res.data
+    }
+  })
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Payment History</h2>
+      <h2 className="text-xl font-semibold mb-4">Payment History {payments.length}</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
           <thead className="bg-gray-100 text-gray-700 text-sm">
             <tr>
+              <th className="px-4 py-2 text-left">No</th>
               <th className="px-4 py-2 text-left">Parcel Info</th>
               <th className="px-4 py-2 text-left">Recipient Info</th>
               <th className="px-4 py-2 text-left">Tracking Number</th>
@@ -67,21 +80,23 @@ export default function PaymentHistory() {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {parcels.map((parcel, index) => (
+            {payments.map((payment, index) => (
               <tr key={index} className="border-t border-gray-200">
-                <td className="px-4 py-3">Liquid Cleanser</td>
-                <td className="px-4 py-3 whitespace-pre-line">
-                  {parcel.name && (
-                    <span className="font-medium">{parcel.name}</span>
+                <td className="px-4 py-3">{ index + 1}</td>
+                <td className="px-4 py-3">{ payment.parcelName}</td>
+                {/* <td className="px-4 py-3 whitespace-pre-line">
+                  {payment.name && (
+                    <span className="font-medium">{payment.name}</span>
                   )}
-                  {parcel.bnName && <div>{parcel.bnName}</div>}
-                  <div>{parcel.address}</div>
-                  {parcel.phone && <div>{parcel.phone}</div>}
-                </td>
-                <td className="px-4 py-3">{parcel.tracking}</td>
+                  {payment.bnName && <div>{payment.bnName}</div>}
+                  <div>{payment.address}</div>
+                  {payment.phone && <div>{payment.phone}</div>}
+                </td> */}
+                <td className="px-4 py-3">{payment.customerEmail}</td>
+                <td className="px-4 py-3">{payment.parcelId}</td>
                 <td className="px-4 py-3">
-                  {parcel.amount}{" "}
-                  <span className="text-green-600">({parcel.status})</span>
+                  {payment.amount}{" "}
+                  <span className="text-green-600">({payment.paymentStatus})</span>
                 </td>
                 <td className="px-4 py-3">
                   <button
