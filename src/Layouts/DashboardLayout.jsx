@@ -5,6 +5,7 @@ import { FaBoxOpen, FaHistory } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { BsLayoutTextSidebar } from "react-icons/bs";
 import useAuth from "../hooks/useAuth";
+import { MdDirectionsBike } from "react-icons/md";
 
 const DashboardLayout = () => {
   const { user } = useAuth();
@@ -149,13 +150,13 @@ const DashboardLayout = () => {
             </li>
             <li>
               <NavLink
-                to="/dashboard/setting"
+                to="/dashboard/approve-riders"
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Settings"
+                data-tip="Approve Riders"
               >
                 {/* Settings icon */}
-                <IoSettingsSharp />
-                <span className="is-drawer-close:hidden">Settings</span>
+                <MdDirectionsBike />
+                <span className="is-drawer-close:hidden">Approve Riders</span>
               </NavLink>
             </li>
           </ul>
