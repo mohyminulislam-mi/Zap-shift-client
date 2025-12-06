@@ -1,11 +1,12 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../pages/Shared/Logo";
-import { FaBoxOpen, FaHistory } from "react-icons/fa";
+import { FaBoxOpen, FaHistory, FaUsers } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { BsLayoutTextSidebar } from "react-icons/bs";
 import useAuth from "../hooks/useAuth";
 import { MdDirectionsBike } from "react-icons/md";
+
 
 const DashboardLayout = () => {
   const { user } = useAuth();
@@ -157,6 +158,17 @@ const DashboardLayout = () => {
                 {/* Settings icon */}
                 <MdDirectionsBike />
                 <span className="is-drawer-close:hidden">Approve Riders</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/user-management"
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="User Management"
+              >
+                {/* Settings icon */}
+                <FaUsers />
+                <span className="is-drawer-close:hidden">User Management</span>
               </NavLink>
             </li>
           </ul>

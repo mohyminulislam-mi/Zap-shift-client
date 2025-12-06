@@ -17,6 +17,7 @@ import PrivateRoute from "./PrivateRoute";
 import PaymentHistory from "../pages/dashboard/Payment History/PaymentHistory";
 import Dashboard from "../pages/dashboard/Dashboard/Dashboard";
 import ApproveRiders from "../pages/Rider/ApproveRiders";
+import UserManagement from "../pages/dashboard/User Management/UserManagement";
 
 export const router = createBrowserRouter([
   {
@@ -89,6 +90,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <PaymentHistory />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/dashboard/user-management",
+        element: (
+          <PrivateRoute>
+            <UserManagement />
           </PrivateRoute>
         ),
       },

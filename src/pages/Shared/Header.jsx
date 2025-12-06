@@ -3,13 +3,18 @@ import { Link, NavLink } from "react-router";
 import Logo from "./Logo";
 import { FiArrowUpRight } from "react-icons/fi";
 import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const Header = () => {
-  const { user, logOut } = useAuth();
+  const { user, logOut, setUser } = useAuth();
 
   const handleLogOut = () => {
     logOut()
-      .then()
+      .then((result) => {
+        console.log(result);
+        toast.success("Logout successful");
+        setUser(null)
+      })
       .catch((error) => {
         console.log(error);
       });

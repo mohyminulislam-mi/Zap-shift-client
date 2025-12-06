@@ -15,6 +15,8 @@ const ApproveRiders = () => {
       return res.data;
     },
   });
+  console.log('riders data', riders);
+  
   const updateRiderStatus = (rider, status) => {
     const updateInfo = { status: status , email: rider.email};
     axiosSecure.patch(`/riders/${rider._id}`, updateInfo).then((res) => {

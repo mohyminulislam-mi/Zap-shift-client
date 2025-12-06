@@ -3,6 +3,8 @@ import Home from "../pages/Home/Home/Home";
 import { Outlet } from "react-router";
 import Footer from "../pages/Shared/Footer";
 import Header from "../pages/Shared/Header";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MainLayout = () => {
   return (
@@ -14,6 +16,16 @@ const MainLayout = () => {
         <Home />
       </Outlet>
       <Footer />
+       <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover={false}
+        draggable
+        theme="light"
+      />
     </div>
   );
 };
