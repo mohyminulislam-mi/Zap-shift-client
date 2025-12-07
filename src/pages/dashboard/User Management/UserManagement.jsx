@@ -7,12 +7,12 @@ import Swal from 'sweetalert2';
 
 const UsersManagement = () => {
     const axiosSecure = useAxiosSecure();
-    const [searchText, setSearchText] = useState('')
+    const [searchItems, setSearchItems] = useState('')
 
     const { refetch, data: users = [] } = useQuery({
-        queryKey: ['users', searchText],
+        queryKey: ['users', searchItems],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/users?searchText=${searchText}`);
+            const res = await axiosSecure.get(`/users?searchText=${searchItems}`);
             return res.data;
         }
     })
@@ -54,9 +54,12 @@ const UsersManagement = () => {
     }
     return (
         <div>
-            <h2 className='text-4xl'>Manage Users: {users.length}</h2>
-            <p>search text: {searchText}</p>
-            <label className="input">
+            <div className='grid grid-cols-2 my-7 px-5'>
+                <div>
+                    <h2 className='text-xl font-semibold'>Manage Users: {users.length}</h2>
+                 </div>
+            <div className='flex justify-end'>
+                 <label className="input">
                 <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <g
                         strokeLinejoin="round"
@@ -70,12 +73,14 @@ const UsersManagement = () => {
                     </g>
                 </svg>
                 <input
-                    onChange={(e) => setSearchText(e.target.value)}
+                    onChange={(e) => setSearchItems(e.target.value)}
                     type="search"
                     className="grow"
                     placeholder="Search users" />
 
             </label>
+           </div>
+           </div>
             <div className="overflow-x-auto">
                 <table className="table">
                     {/* head */}
@@ -92,7 +97,7 @@ const UsersManagement = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user, index) => <tr>
+                        {users.map((user, index) => <tr key={index}>
                             <td>
                                 {index + 1}
                             </td>
