@@ -51,6 +51,7 @@ const ApproveRiders = () => {
               <th>Email</th>
               <th>District</th>
               <th>status</th>
+              <th>Work Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -61,6 +62,7 @@ const ApproveRiders = () => {
                 <td>{rider.name}</td>
                 <td>{rider.email}</td>
                 <td>{rider.district}</td>
+                <td>{rider.workStatus}</td>
                 <td>
                   <p
                     className={`${

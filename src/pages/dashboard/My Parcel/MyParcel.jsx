@@ -73,6 +73,7 @@ const MyParcel = () => {
               <th>Name</th>
               <th>Cost</th>
               <th>Payment Status</th>
+              <th>tracking Id</th>
               <th>Delivary Status</th>
               <th>Action</th>
             </tr>
@@ -98,7 +99,8 @@ const MyParcel = () => {
                     </button>
                   )}
                 </td>
-                <td>{parcel.delivaryStatus}</td>
+                <td>{parcel.trackingId}</td>
+                <td>{parcel.deliveryStatus}</td>
                 <td className="flex gap-3">
                   <button className="btn hover:bg-primary ">
                     <IoSearchSharp />

@@ -6,7 +6,7 @@ import { IoSettingsSharp } from "react-icons/io5";
 import { BsLayoutTextSidebar } from "react-icons/bs";
 import useAuth from "../hooks/useAuth";
 import useRole from "../hooks/useRole";
-import { MdDirectionsBike } from "react-icons/md";
+import { MdAssignmentAdd, MdDirectionsBike } from "react-icons/md";
 
 const DashboardLayout = () => {
   const { user } = useAuth();
@@ -162,6 +162,19 @@ const DashboardLayout = () => {
                     <MdDirectionsBike />
                     <span className="is-drawer-close:hidden">
                       Approve Riders
+                    </span>
+                  </NavLink>
+                </li> 
+                <li>
+                  <NavLink
+                    to="/dashboard/assign-riders"
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Assign Riders"
+                  >
+                    {/* Assign Riders*/}
+                    <MdAssignmentAdd />
+                    <span className="is-drawer-close:hidden">
+                      Assign Riders
                     </span>
                   </NavLink>
                 </li> 
