@@ -151,7 +151,7 @@ const DashboardLayout = () => {
               </NavLink>
             </li>
             {role === "admin" && (
-              <>
+               <>
                 <li>
                   <NavLink
                     to="/dashboard/approve-riders"
@@ -164,14 +164,14 @@ const DashboardLayout = () => {
                       Approve Riders
                     </span>
                   </NavLink>
-                </li>
+                </li> 
                 <li>
                   <NavLink
                     to="/dashboard/user-management"
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                     data-tip="User Management"
                   >
-                    {/*User Management */}
+                   {/*  User Management */}
                     <FaUsers />
                     <span className="is-drawer-close:hidden">
                       User Management
@@ -180,13 +180,12 @@ const DashboardLayout = () => {
                 </li>
               </>
             )}
-             <li>
+            <li>
               <NavLink
                 to="/dashboard/setting"
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                 data-tip="Setting"
               >
-                {/* Setting */}
                 <IoSettingsSharp />
                 <span className="is-drawer-close:hidden">Setting</span>
               </NavLink>
