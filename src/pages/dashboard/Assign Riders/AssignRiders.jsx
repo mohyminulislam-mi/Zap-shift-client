@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 
 const AssignRiders = () => {
   const axiosSecure = useAxiosSecure();
@@ -16,7 +17,7 @@ const AssignRiders = () => {
     },
   });
   // todo: invalidate query after assigning a rider
-  const { data: riders = [] } = useQuery({
+  const { data: riders = [], refetch: parcelsRefetch } = useQuery({
     queryKey: ["riders", selectedParcel?.senderDistrict, "available"],
     enabled: !!selectedParcel,
     queryFn: async () => {
@@ -31,6 +32,29 @@ const AssignRiders = () => {
     console.log(parcel.senderDistrict);
 
     riderModalRef.current.showModal();
+  };
+  const handleAssignRider = (rider) => {
+    const riderAssignInfo = {
+      riderId: rider._id,
+      riderEmail: rider.email,
+      riderName: rider.name,
+      parcelId: selectedParcel._id,
+    };
+    axiosSecure
+      .patch(`/parcels/${selectedParcel._id}`, riderAssignInfo)
+      .then((res) => {
+        if (res.data.modifiedCount) {
+          riderModalRef.current.close();
+          parcelsRefetch();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `Rider has been assigned.`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
   };
   return (
     <div>
@@ -61,7 +85,7 @@ const AssignRiders = () => {
                     onClick={() => assignModal(parcel)}
                     className="btn btn-primary text-secondary"
                   >
-                    Assign Rider
+                    Riders
                   </button>
                 </td>
               </tr>
@@ -78,32 +102,35 @@ const AssignRiders = () => {
           <h3 className="font-bold text-lg">Riders: {riders.length}!</h3>
 
           <p>Hello developer</p>
-          {/* <div className="overflow-x-auto">
-                        <table className="table table-zebra">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Name</th>
-                                    <th>Job</th>
-                                    <th>Favorite Color</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {riders.map((rider, i) => <tr key={rider._id}>
-                                    <th>{i + 1}</th>
-                                    <td>{rider.name}</td>
-                                    <td>{rider.email}</td>
-                                    <td>
-                                        <button
-                                            onClick={() => handleAssignRider(rider)}
-                                            className='btn btn-primary text-black'>Assign</button>
-                                    </td>
-                                </tr>)}
-
-
-                            </tbody>
-                        </table>
-                    </div> */}
+          <div className="overflow-x-auto">
+            <table className="table table-zebra">
+              <thead>
+                <tr>
+                  <th>Rider No</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Pickup Rider</th>
+                </tr>
+              </thead>
+              <tbody>
+                {riders.map((rider, i) => (
+                  <tr key={rider._id}>
+                    <th>{i + 1}</th>
+                    <td>{rider.name}</td>
+                    <td>{rider.email}</td>
+                    <td>
+                      <button
+                        onClick={() => handleAssignRider(rider)}
+                        className="btn btn-primary text-black"
+                      >
+                        Assign
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           <div className="modal-action">
             <form method="dialog">

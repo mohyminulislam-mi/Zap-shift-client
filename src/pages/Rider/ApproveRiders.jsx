@@ -8,20 +8,20 @@ import Swal from "sweetalert2";
 
 const ApproveRiders = () => {
   const axiosSecure = useAxiosSecure();
-  const {refetch, data: riders = [] } = useQuery({
+  const { refetch, data: riders = [] } = useQuery({
     queryKey: ["riders", "pending"],
     queryFn: async () => {
       const res = await axiosSecure.get("/riders");
       return res.data;
     },
   });
-  console.log('riders data', riders);
-  
+  console.log("riders data", riders);
+
   const updateRiderStatus = (rider, status) => {
-    const updateInfo = { status: status , email: rider.email};
+    const updateInfo = { status: status, email: rider.email };
     axiosSecure.patch(`/riders/${rider._id}`, updateInfo).then((res) => {
-        if (res.data.modifiedCount) {
-          refetch();
+      if (res.data.modifiedCount) {
+        refetch();
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -33,7 +33,7 @@ const ApproveRiders = () => {
     });
   };
   const handleApproval = (rider) => {
-    updateRiderStatus(rider, "Approved");
+    updateRiderStatus(rider, "approved");
   };
   const handleRejection = (rider) => {
     updateRiderStatus(rider, "Rejected");
@@ -66,7 +66,7 @@ const ApproveRiders = () => {
                 <td>
                   <p
                     className={`${
-                      rider.status === "Approved"
+                      rider.status === "approved"
                         ? "text-green-800"
                         : "text-red-500"
                     }`}
