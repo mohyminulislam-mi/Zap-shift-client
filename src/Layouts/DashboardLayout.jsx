@@ -1,211 +1,205 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../pages/Shared/Logo";
-import { FaBoxOpen, FaHistory, FaUsers } from "react-icons/fa";
-import { IoSettingsSharp } from "react-icons/io5";
-import { BsLayoutTextSidebar } from "react-icons/bs";
+import {
+  FaBoxOpen,
+  FaHistory,
+  FaUsers,
+  FaHome,
+  FaBars,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import { IoSettingsSharp, IoNotificationsOutline } from "react-icons/io5";
+import { MdAssignmentAdd, MdDirectionsBike, MdClose } from "react-icons/md";
 import useAuth from "../hooks/useAuth";
 import useRole from "../hooks/useRole";
-import { MdAssignmentAdd, MdDirectionsBike } from "react-icons/md";
 
 const DashboardLayout = () => {
-  const { user } = useAuth();
+  const { user, logOut } = useAuth();
   const { role } = useRole();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const navItems = [
+    { to: "/dashboard", icon: <FaHome />, label: "Homepage" },
+    { to: "/dashboard/My-Parcel", icon: <FaBoxOpen />, label: "My Parcel" },
+    {
+      to: "/dashboard/payment-history",
+      icon: <FaHistory />,
+      label: "Payment History",
+    },
+  ];
+
+  const adminItems = [
+    {
+      to: "/dashboard/approve-riders",
+      icon: <MdDirectionsBike />,
+      label: "Approve Riders",
+    },
+    {
+      to: "/dashboard/assign-riders",
+      icon: <MdAssignmentAdd />,
+      label: "Assign Riders",
+    },
+    {
+      to: "/dashboard/user-management",
+      icon: <FaUsers />,
+      label: "User Management",
+    },
+  ];
+
+  const renderLinks = (items) =>
+    items.map((item) => (
+      <li key={item.to} className="mb-1">
+        <NavLink
+          to={item.to}
+          end
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+              isActive
+                ? "bg-primary text-black shadow-md"
+                : "hover:bg-base-300 text-base-content/80"
+            }`
+          }
+        >
+          <span className="text-xl">{item.icon}</span>
+          <span className="font-medium">{item.label}</span>
+        </NavLink>
+      </li>
+    ));
 
   return (
-    <div className="drawer lg:drawer-open">
-      <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content">
-        {/* Navbar */}
-        <nav className="navbar w-full bg-base-300 flex items-center justify-between">
-          <div className="flex items-center">
-            <label
-              htmlFor="my-drawer-4"
-              aria-label="open sidebar"
-              className="btn btn-square btn-ghost"
+    <div className="flex h-screen bg-base-100 overflow-hidden text-base-content">
+      {/* --- Sidebar for Desktop --- */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-base-200 border-r border-base-300 transition-transform duration-300 transform 
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:inset-0`}
+      >
+        <div className="flex flex-col h-full">
+          {/* Sidebar Header */}
+          <div className="p-6 flex items-center justify-between">
+            <Logo />
+            <button
+              className="lg:hidden text-2xl"
+              onClick={() => setIsSidebarOpen(false)}
             >
-              {/* Sidebar toggle icon */}
-              <BsLayoutTextSidebar />
-            </label>
-            <div className="px-3">
-              <Logo />
-            </div>
+              <MdClose />
+            </button>
           </div>
-          <div className="flex-none">
-            <div className="dropdown dropdown-end">
-              <button className="btn btn-ghost btn-circle">
-                <div className="indicator">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    {" "}
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    />{" "}
-                  </svg>
-                  <span className="badge badge-xs badge-primary indicator-item"></span>
-                </div>
-              </button>
-            </div>
+
+          {/* Navigation Links */}
+          <nav className="flex-1 px-4 overflow-y-auto custom-scrollbar">
+            <ul className="menu p-0">
+              <div className="text-xs font-bold text-base-content/40 uppercase mb-2 px-4">
+                Menu
+              </div>
+              {renderLinks(navItems)}
+
+              {role === "admin" && (
+                <>
+                  <div className="text-xs font-bold text-base-content/40 uppercase mt-6 mb-2 px-4">
+                    Admin Panel
+                  </div>
+                  {renderLinks(adminItems)}
+                </>
+              )}
+            </ul>
+          </nav>
+
+          {/* Sidebar Footer */}
+          <div className="p-4 border-t border-base-300">
+            <NavLink
+              to="/dashboard/setting"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-base-300 transition-colors mb-2"
+            >
+              <IoSettingsSharp className="text-xl" />
+              <span className="font-medium">Settings</span>
+            </NavLink>
+            <button
+              onClick={logOut}
+              className="flex items-center gap-3 px-4 py-3 rounded-lg text-error hover:bg-error/10 transition-colors w-full cursor-pointer"
+            >
+              <FaSignOutAlt className="text-xl" />
+              <span className="font-medium">Logout</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* --- Main Content Area --- */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Top Navbar */}
+        <header className="h-16 flex items-center justify-between px-4 lg:px-8 bg-base-100 border-b border-base-300 z-40">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="btn btn-ghost btn-sm lg:hidden"
+            >
+              <FaBars className="text-xl" />
+            </button>
+            <h2 className="text-lg font-semibold hidden md:block capitalize">
+              Welcome back, {user?.displayName?.split(" ")[0] || "User"}!
+            </h2>
+          </div>
+
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* Notification */}
+            <button className="btn btn-ghost btn-circle">
+              <div className="indicator">
+                <IoNotificationsOutline className="text-2xl" />
+                <span className="badge badge-xs badge-primary indicator-item"></span>
+              </div>
+            </button>
+
+            {/* Profile Dropdown */}
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
                 role="button"
-                className="btn btn-ghost btn-circle avatar"
+                className="btn btn-ghost btn-circle avatar border-2 border-primary/20"
               >
                 <div className="w-10 rounded-full">
                   <img
-                    alt="image"
-                    src={user?.photoURL || user.reloadUserInfo.photoUrl}
+                    src={
+                      user?.photoURL || "https://ui-avatars.com/api/?name=User"
+                    }
+                    alt="Avatar"
                   />
                 </div>
               </div>
               <ul
-                tabIndex="-1"
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                tabIndex={0}
+                className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52 border border-base-300"
               >
-                <li>
-                  <a className="justify-between">
-                    Profile
-                    <span className="badge">New</span>
-                  </a>
+                <li className="px-4 py-2 font-bold border-b border-base-200 mb-1">
+                  {user?.displayName}
                 </li>
                 <li>
-                  <a>Settings</a>
+                  <a>Profile</a>
                 </li>
-                <li>
+                <li className="text-error" onClick={logOut}>
                   <a>Logout</a>
                 </li>
               </ul>
             </div>
           </div>
-        </nav>
-        {/* Page content here */}
-        <div className="p-4">
-          <Outlet />
-        </div>
+        </header>
+
+        {/* Dynamic Page Content */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 bg-base-200/50">
+          <div className="max-w-6xl mx-auto">
+            <Outlet />
+          </div>
+        </main>
       </div>
 
-      <div className="drawer-side is-drawer-close:overflow-visible">
-        <label
-          htmlFor="my-drawer-4"
-          aria-label="close sidebar"
-          className="drawer-overlay"
-        ></label>
-        <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
-          {/* Sidebar content here */}
-          <ul className="menu w-full grow">
-            {/* List item */}
-            <li>
-              <NavLink
-                to="/dashboard"
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Homepage"
-              >
-                {/* Home icon */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  strokeWidth="2"
-                  fill="none"
-                  stroke="currentColor"
-                  className="my-1.5 inline-block size-4"
-                >
-                  <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
-                  <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                </svg>
-                <span className="is-drawer-close:hidden">Homepage</span>
-              </NavLink>
-            </li>
-
-            {/* List item */}
-            <li>
-              <NavLink
-                to="/dashboard/My-Parcel"
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="My Parcel"
-              >
-                {/* My Parcel */}
-                <FaBoxOpen />
-                <span className="is-drawer-close:hidden">My Parcel</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/dashboard/payment-history"
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Payment History"
-              >
-                {/* Payment History */}
-                <FaHistory />
-                <span className="is-drawer-close:hidden">Payment History</span>
-              </NavLink>
-            </li>
-            {role === "admin" && (
-               <>
-                <li>
-                  <NavLink
-                    to="/dashboard/approve-riders"
-                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Approve Riders"
-                  >
-                    {/* Approve Riders*/}
-                    <MdDirectionsBike />
-                    <span className="is-drawer-close:hidden">
-                      Approve Riders
-                    </span>
-                  </NavLink>
-                </li> 
-                <li>
-                  <NavLink
-                    to="/dashboard/assign-riders"
-                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Assign Riders"
-                  >
-                    {/* Assign Riders*/}
-                    <MdAssignmentAdd />
-                    <span className="is-drawer-close:hidden">
-                      Assign Riders
-                    </span>
-                  </NavLink>
-                </li> 
-                <li>
-                  <NavLink
-                    to="/dashboard/user-management"
-                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="User Management"
-                  >
-                   {/*  User Management */}
-                    <FaUsers />
-                    <span className="is-drawer-close:hidden">
-                      User Management
-                    </span>
-                  </NavLink>
-                </li>
-              </>
-            )}
-            <li>
-              <NavLink
-                to="/dashboard/setting"
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Setting"
-              >
-                <IoSettingsSharp />
-                <span className="is-drawer-close:hidden">Setting</span>
-              </NavLink>
-            </li>
-          </ul>
-        </div>
-      </div>
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
     </div>
   );
 };

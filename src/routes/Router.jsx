@@ -20,6 +20,7 @@ import ApproveRiders from "../pages/Rider/ApproveRiders";
 import UserManagement from "../pages/dashboard/User Management/UserManagement";
 import AdminRoutes from "./AdminRoutes";
 import AssignRiders from "../pages/dashboard/Assign Riders/AssignRiders";
+import Contact from "../pages/contact/Contact";
 // import Forbidden from "../components/Forbidden";
 
 export const router = createBrowserRouter([
@@ -53,6 +54,10 @@ export const router = createBrowserRouter([
         path: "/coverage",
         element: <Coverage />,
         loader: () => fetch("/serviceCenters.json").then((res) => res.json()),
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
       },
     ],
   },
