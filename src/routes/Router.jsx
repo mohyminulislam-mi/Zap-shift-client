@@ -23,6 +23,7 @@ import AssignRiders from "../pages/dashboard/Assign Riders/AssignRiders";
 import Contact from "../pages/contact/Contact";
 import Forbidden from "../components/Forbidden";
 import About from "../pages/about/About";
+import Pricing from "../pages/Pricing/Pricing";
 
 export const router = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ export const router = createBrowserRouter([
       {
         path: "/about-us",
         element: <About />,
+      },
+      {
+        path: "/pricing",
+        element: <Pricing />,
       },
     ],
   },
